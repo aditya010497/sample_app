@@ -54,8 +54,15 @@ test "email addresses should be saved as lower-case" do
     @user.password = @user.password_confirmation = " " * 6
     assert_not @user.valid?
     end
-    test "password should have a minimum length" do
+  test "password should have a minimum length" do
     @user.password = @user.password_confirmation = "a" * 5
     assert_not @user.valid?
     end
+  test "associated microposts should be destroyed" do
+      @user.save
+      @user.microposts.create!(content: "Lorem ipsum")
+      assert_difference 'Micropost.count', -1 do
+      @user.destroy
+      end
+      end
     end
